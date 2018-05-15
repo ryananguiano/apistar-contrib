@@ -9,7 +9,7 @@ API Star Contrib
 .. image:: https://img.shields.io/travis/ryananguiano/apistar-contrib.svg
         :target: https://travis-ci.org/ryananguiano/apistar-contrib
 
-.. image:: https://readthedocs.org/projects/apistar-contrib/badge/?version=latest
+.. image:: https://readthedocs.org/projects/api-star-contrib/badge/?version=latest
         :target: https://api-star-contrib.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
@@ -24,7 +24,7 @@ Contrib packages to add on to API Star.
 
 
 * Free software: MIT license
-* Documentation: https://apistar-contrib.readthedocs.io.
+* Documentation: https://api-star-contrib.readthedocs.io.
 
 
 Features
