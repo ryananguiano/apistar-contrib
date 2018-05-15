@@ -10,7 +10,7 @@ API Star Contrib
         :target: https://travis-ci.org/ryananguiano/apistar-contrib
 
 .. image:: https://readthedocs.org/projects/apistar-contrib/badge/?version=latest
-        :target: https://apistar-contrib.readthedocs.io/en/latest/?badge=latest
+        :target: https://api-star-contrib.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
