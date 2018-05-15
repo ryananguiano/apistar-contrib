@@ -1,0 +1,12 @@
+apistar==0.5.18
+
+bumpversion==0.5.3
+watchdog==0.8.3
+flake8==3.5.0
+tox==3.0.0
+coverage==4.5.1
+Sphinx==1.7.4
+twine==1.11.0
+
+pytest==3.5.1
+pytest-runner==4.2
