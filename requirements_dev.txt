@@ -1,4 +1,4 @@
-apistar==0.5.20
+apistar==0.5.21
 
 bumpversion==0.5.3
 watchdog==0.8.3
