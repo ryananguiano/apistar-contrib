@@ -60,9 +60,11 @@ class LocalMemorySessionHook:
 
         request._session = session
 
-    def on_response(self, session: Session, response: http.Response, exc: Exception):
+    def on_response(self, request: http.Request, response: http.Response, exc: Exception):
         if exc is not None:
             return
-        session_headers = self.store.save(session)
+        if not hasattr(request, '_session'):
+            return
+        session_headers = self.store.save(request._session)
         for key, value in session_headers.items():
             response.headers[key] = value
