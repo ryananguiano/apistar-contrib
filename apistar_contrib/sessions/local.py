@@ -1,10 +1,10 @@
-import random
 import string
 import typing
 
 from apistar import http
 from werkzeug.http import dump_cookie, parse_cookie
 
+from apistar_contrib.compat import random
 from apistar_contrib.sessions import Session
 
 local_memory_sessions = {}  # type: typing.Dict[str, typing.Dict[str, typing.Any]]
@@ -26,20 +26,20 @@ class LocalMemorySessionStore:
 
     def save(self, session: Session) -> typing.Dict[str, str]:
         headers = {}
+        if session.is_cleared:
+            local_memory_sessions.pop(session.session_id, None)
+            session.session_id = self._generate_key()
+            session.is_new = True
         if session.is_new:
             cookie = dump_cookie(self.cookie_name, session.session_id)
             headers['set-cookie'] = cookie
-        if session.is_cleared:
-            del local_memory_sessions[session.session_id]
         if session.is_new or session.is_modified:
             local_memory_sessions[session.session_id] = session.data
         return headers
 
-    def _generate_key(self) -> str:
-        length = 30
+    def _generate_key(self, length=30) -> str:
         allowed_chars = string.ascii_lowercase + string.digits
-        urandom = random.SystemRandom()
-        return ''.join(urandom.choice(allowed_chars) for _ in range(length))
+        return ''.join(random.choice(allowed_chars) for _ in range(length))
 
 
 class LocalMemorySessionHook:
@@ -63,8 +63,8 @@ class LocalMemorySessionHook:
     def on_response(self, request: http.Request, response: http.Response, exc: Exception):
         if exc is not None:
             return
-        if not hasattr(request, '_session'):
-            return
-        session_headers = self.store.save(request._session)
-        for key, value in session_headers.items():
-            response.headers[key] = value
+        session = getattr(request, '_session', None)
+        if session:
+            session_headers = self.store.save(session)
+            for key, value in session_headers.items():
+                response.headers[key] = value
