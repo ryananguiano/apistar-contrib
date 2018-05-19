@@ -6,7 +6,7 @@ import hmac
 import re
 import string
 
-from apistar import App, http, types, validators
+from apistar import App, http
 from decimal import Decimal
 
 from apistar_contrib.compat import random
@@ -14,19 +14,6 @@ from apistar_contrib.compat import random
 CSRF_SECRET_LENGTH = 32
 CSRF_TOKEN_LENGTH = 2 * CSRF_SECRET_LENGTH
 CSRF_ALLOWED_CHARS = string.ascii_letters + string.digits
-
-
-# Settings for CSRF cookie.
-class CsrfSettings(types.Type):
-    CSRF_COOKIE_NAME = validators.String(default='csrftoken')
-    CSRF_COOKIE_AGE = validators.Integer(default=60 * 60 * 24 * 7 * 52)
-    CSRF_COOKIE_DOMAIN = validators.String(allow_null=True)
-    CSRF_COOKIE_PATH = validators.String(default='/')
-    CSRF_COOKIE_SECURE = validators.Boolean(default=False)
-    CSRF_COOKIE_HTTPONLY = validators.Boolean(default=False)
-    CSRF_HEADER_NAME = validators.String(default='HTTP_X_CSRFTOKEN')
-    CSRF_TOKEN_FIELD_NAME = validators.String(default='csrf_token')
-    CSRF_TRUSTED_ORIGINS = validators.Array(default=[])
 
 
 def _get_new_csrf_string():

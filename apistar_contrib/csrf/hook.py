@@ -14,7 +14,7 @@ from markupsafe import Markup
 from werkzeug.http import dump_cookie, parse_cookie
 
 from apistar_contrib.csrf import utils
-
+from apistar_contrib.csrf.settings import CsrfSettings
 
 REASON_NO_REFERER = "Referer checking failed - no Referer."
 REASON_BAD_REFERER = "Referer checking failed - %s does not match any trusted origins."
@@ -22,6 +22,14 @@ REASON_NO_CSRF_COOKIE = "CSRF cookie not set."
 REASON_BAD_TOKEN = "CSRF token missing or incorrect."
 REASON_MALFORMED_REFERER = "Referer checking failed - Referer is malformed."
 REASON_INSECURE_REFERER = "Referer checking failed - Referer is insecure while host is secure."
+
+
+def get_token(request: http.Request) -> str:
+    """
+    Get a CSRF token
+    """
+    if hasattr(request, '_csrf_hook'):
+        return request._csrf_hook.get_token()
 
 
 def rotate_token(request: http.Request):
@@ -42,12 +50,12 @@ class EnforceCsrfHook:
     template tag.
     """
     def __init__(self, settings=None):
-        self.settings = utils.CsrfSettings(settings or {})
+        self.settings = CsrfSettings(settings or {})
         self.csrf_token = None
         self.csrf_token_used = False
         self.csrf_cookie_needs_reset = False
 
-    def get_token(self):
+    def get_token(self) -> str:
         if self.csrf_token is None:
             csrf_secret = utils._get_new_csrf_string()
             self.csrf_token = utils._salt_cipher_secret(csrf_secret)

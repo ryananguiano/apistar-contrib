@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSRF Form</title>
+</head>
+<body>
+    <ul>
+        <li><a href="{{ reverse_url('show_form') }}">Form with CSRF</a></li>
+        <li><a href="{{ reverse_url('show_no_csrf_form') }}">Form without CSRF</a></li>
+    </ul>
+    {% if success %}<h1>Successful POST</h1>{% endif %}
+    <form action="{{ reverse_url('handle_form') }}" method="post">
+        {% if show_csrf %} {{ csrf_token() }} {% endif %}
+        <button type="submit">Submit form {% if show_csrf %}with{% else %}without{% endif %} CSRF</button>
+    </form>
+</body>
+</html>
