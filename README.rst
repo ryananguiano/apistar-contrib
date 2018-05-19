@@ -100,7 +100,8 @@ CSRF Token
 
 
     def handle_form(request: http.Request):
-        rotate_token(request)  # You should rotate CSRF tokens after successful POSTs
+        # You should rotate CSRF tokens after successful login/logout
+        rotate_token(request)
         return app.render_template(
             'form.html',
             show_csrf=True,
@@ -123,10 +124,10 @@ CSRF Token
         template_dir=TEMPLATE_DIR,
     )
 
-    # templates/form.html
 
 .. code-block:: html
 
+    <!-- templates/form.html -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
