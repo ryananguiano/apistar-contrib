@@ -2,7 +2,7 @@
 
 __author__ = """Ryan Anguiano"""
 __email__ = 'ryan.anguiano@gmail.com'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 from apistar_contrib.sessions import SessionComponent
