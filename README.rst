@@ -49,11 +49,10 @@ Local Session Store
 .. code-block:: python
 
     from apistar import App, Route, http
-    from apistar_contrib.sessions import SessionComponent, Session
-    from apistar_contrib.sessions.local import LocalMemorySessionHook
+    from apistar_contrib.sessions import Session, SessionComponent, SessionHook, LocalMemorySessionStore
 
 
-    def index(session: Session, params: http.QueryParams):
+    def use_session(session: Session, params: http.QueryParams):
         for key, value in params:
             session[key] = value
         return session.data
@@ -65,14 +64,14 @@ Local Session Store
 
 
     routes = [
-        Route('/', 'GET', index),
+        Route('/', 'GET', use_session),
         Route('/clear', 'GET', clear_session),
     ]
 
     app = App(
         routes=routes,
-        components=[SessionComponent()],
-        event_hooks=[LocalMemorySessionHook]
+        components=[SessionComponent(LocalMemorySessionStore)],
+        event_hooks=[SessionHook]
     )
 
 
