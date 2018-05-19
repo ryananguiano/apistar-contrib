@@ -70,8 +70,8 @@ class EnforceCsrfHook:
         self.csrf_cookie_needs_reset = True
 
     def csrf_token_template_hook(self):
-        return Markup(f'<input type="hidden" name="{self.settings.CSRF_TOKEN_FIELD_NAME}"'
-                      f' value="{self.get_token()}"/>')
+        return Markup('<input type="hidden" name="{}" value="{}"/>'
+                      .format(self.settings.CSRF_TOKEN_FIELD_NAME, self.get_token()))
 
     def _accept(self):
         return None

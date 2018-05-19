@@ -9,7 +9,7 @@ class RedisSessionStore(SessionStore):
         super().__init__(**kwargs)
 
     def get_key(self, session_id):
-        return f'session:{session_id}'
+        return 'session:{}'.format(session_id)
 
     def new(self) -> Session:
         session_id = self._generate_key()
