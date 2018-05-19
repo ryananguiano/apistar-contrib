@@ -53,6 +53,7 @@ class Session(object):
         self.data = {}
         self.is_cleared = True
         self.needs_cookie = True
+        self.expires = NOT_SET
 
     def save(self):
         return self.store.save(self)
