@@ -6,10 +6,6 @@ local_memory_sessions = {}  # type: typing.Dict[str, typing.Dict[str, typing.Any
 
 
 class LocalMemorySessionStore(SessionStore):
-    def new(self) -> Session:
-        session_id = self._generate_key()
-        return Session(self, session_id=session_id)
-
     def load(self, session_id: str) -> Session:
         try:
             data = local_memory_sessions[session_id]

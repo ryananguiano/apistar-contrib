@@ -29,22 +29,22 @@ Features
 --------
 
 * CSRF Token Hook
-* Local Session Store (Development)
+* Local Session Store (For Development)
 * Timezone Support
+* Redis Session Store
 
 
 TODO
 ----
 
-* Redis Session Store
 * DB Session Store
 
 
 Usage
 -----
 
-Local Session Store
-```````````````````
+Local Session Store (For Development)
+`````````````````````````````````````
 
 .. code-block:: python
 
@@ -71,6 +71,38 @@ Local Session Store
     app = App(
         routes=routes,
         components=[SessionComponent(LocalMemorySessionStore)],
+        event_hooks=[SessionHook]
+    )
+
+
+Redis Session Store
+```````````````````
+
+.. code-block:: python
+
+    from apistar import App, Route, http
+    from apistar_contrib.sessions import Session, SessionComponent, SessionHook, RedisSessionStore
+
+
+    def use_session(session: Session, params: http.QueryParams):
+        for key, value in params:
+            session[key] = value
+        return session.data
+
+
+    def clear_session(session: Session):
+        session.clear()
+        return session.data
+
+
+    routes = [
+        Route('/', 'GET', use_session),
+        Route('/clear', 'GET', clear_session),
+    ]
+
+    app = App(
+        routes=routes,
+        components=[SessionComponent(RedisSessionStore, 'redis://localhost:6379/0')],
         event_hooks=[SessionHook]
     )
 

@@ -5,7 +5,7 @@ import typing
 from apistar import http, Component
 from werkzeug.http import parse_cookie, dump_cookie
 
-from apistar_contrib.sessions.settings import SessionSettings
+from apistar_contrib.sessions.settings import SessionSettings, SettingsMapping
 
 NOT_SET = object()
 
@@ -43,11 +43,10 @@ class Session(object):
         del self.data[key]
         self.is_modified = True
 
-    def get(self, key: str, default=None) -> typing.Any:
-        return self.data.get(key, default)
-
-    def pop(self, key: str, *args) -> typing.Any:
-        return self.data.pop(key, *args)
+    def __getattr__(self, item):
+        if item in ('get', 'pop', 'update'):
+            return getattr(self.data, item)
+        raise AttributeError
 
     def clear(self):
         self.data = {}
@@ -63,13 +62,13 @@ class Session(object):
         self.needs_cookie = True
 
 
-class SessionStore(metaclass=abc.ABCMeta):
-    def __init__(self, session_settings, **kwargs):
+class SessionStore(abc.ABC):
+    def __init__(self, session_settings: SessionSettings, **kwargs):
         self.session_settings = session_settings
 
-    @abc.abstractmethod
     def new(self) -> Session:
-        raise NotImplementedError
+        session_id = self._generate_key()
+        return Session(self, session_id=session_id)
 
     @abc.abstractmethod
     def load(self, session_id: str) -> Session:
@@ -87,10 +86,11 @@ class SessionStore(metaclass=abc.ABCMeta):
 
 
 class SessionComponent(Component):
-    def __init__(self, store: type, session_settings=None, **kwargs):
+    def __init__(self, store: type, *args, session_settings: SettingsMapping=None, **kwargs):
         assert issubclass(store, SessionStore)
         self.settings = SessionSettings(session_settings or {})
-        self.store = store(session_settings=self.settings, **kwargs)
+        kwargs['session_settings'] = self.settings
+        self.store = store(*args, **kwargs)
 
     def resolve(self, cookie: http.Header) -> Session:
         if cookie:

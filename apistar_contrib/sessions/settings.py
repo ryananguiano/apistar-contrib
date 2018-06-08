@@ -1,3 +1,5 @@
+import typing
+
 from apistar import types, validators
 
 
@@ -9,3 +11,6 @@ class SessionSettings(types.Type):
     cookie_path = validators.String(default='/')
     cookie_secure = validators.Boolean(default=False)
     cookie_httponly = validators.Boolean(default=False)
+
+
+SettingsMapping = typing.Mapping[str, typing.Union[str, int, bool]]
