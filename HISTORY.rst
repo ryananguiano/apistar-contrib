@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.6 (2018-06-08)
+------------------
+
+* Added Redis Session Store to README and tests
+
 0.0.5 (2018-05-19)
 ------------------
 
