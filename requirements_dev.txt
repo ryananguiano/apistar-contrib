@@ -1,4 +1,4 @@
-apistar==0.5.37
+apistar==0.5.40
 redis==2.10.6
 
 bumpversion==0.5.3
