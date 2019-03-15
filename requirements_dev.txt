@@ -1,5 +1,5 @@
 apistar==0.6.0
-redis==3.2.0
+redis==3.2.1
 
 bumpversion==0.5.3
 watchdog==0.9.0
